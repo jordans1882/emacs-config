@@ -1,0 +1,17 @@
+priv.el
+.cache
+.cask/
+ac-comphist.dat
+auto-save-list/
+elpa/
+elpy/
+emojis/
+exwm-x/
+forge-database.sqlite
+init.elc
+projectile-bookmarks.eld
+recentf
+recentf~
+request/
+transient/
+var/
