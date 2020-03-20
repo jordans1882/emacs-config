@@ -16,9 +16,16 @@
 (require 'pallet)
 (pallet-mode t)
 
+;; (eval-when-compile (defvar misenplace-wm))
 ;; use-package to load and configure packages
 (require 'use-package)
-(use-package misenplace)
+(use-package misenplace
+  :init
+  (setq misenplace-wm nil)
+  :defines misenplace-wm
+  :functions setup-misenplacewm
+  :config
+  (setup-misenplacewm))
 
 ;; set transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 50))
