@@ -111,5 +111,5 @@
  (depends-on "counsel-projectile")
  (depends-on "which-key")
 
-(depends-on "misenplace" :git "https://gitlab.com/jordans1882/misenplace.git" :branch "misenplacewm" :files ("*.el" "assets"))
+(depends-on "misenplace" :git "https://gitlab.com/jordans1882/misenplace.git" :branch "master" :files ("*.el" "assets"))
 
