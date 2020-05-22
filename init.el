@@ -25,7 +25,13 @@
   :defines misenplace-wm
   :functions setup-misenplacewm
   :config
-  (setup-misenplacewm))
+  ;;(setup-misenplacewm)
+  (setup-misenplaceterm)
+  )
+
+  (set-default-font "DejaVu Sans Mono-30")
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono-30" )
+  (set-frame-font "DejaVu Sans Mono-30" nil t)
 
 ;; set transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 50))
