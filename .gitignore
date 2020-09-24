@@ -1,7 +1,15 @@
 priv.el
 .cache
 .cask/
+.dap-breakpoints
+.lsp-session-v1
+async-bytecomp.log
+projectile.cache
 ac-comphist.dat
+bookmarks
+gtkrc
+flycheck_init.elc
+eshell/
 auto-save-list/
 elpa/
 elpy/
