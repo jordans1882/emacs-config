@@ -25,6 +25,7 @@
 (depends-on "company")
 (depends-on "lsp-ui")
 (depends-on "lsp-ivy")
+(depends-on "lsp-latex")
 (depends-on "lsp-treemacs")
 (depends-on "company-lsp")
 (depends-on "cheatsheet")
@@ -48,6 +49,7 @@
 (depends-on "ert-async")
 (depends-on "ert-runner")
 (depends-on "evil")
+(depends-on "evil-snipe")
 (depends-on "evil-nerd-commenter")
 (depends-on "eyebrowse")
 (depends-on "ess")
@@ -121,5 +123,5 @@
 (depends-on "counsel-projectile")
 (depends-on "which-key")
 
-(depends-on "misenplace" :git "https://gitlab.com/jordans1882/misenplace.git" :branch "master" :files ("*.el" "assets"))
+(depends-on "misenplace" :git "https://github.com/jordans1882/misenplace-emacs.git" :branch "master" :files ("*.el" "assets"))
 
