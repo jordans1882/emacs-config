@@ -9,6 +9,8 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+;; (setq byte-compile-warnings '(cl-functions))
+
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
