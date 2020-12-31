@@ -1,5 +1,3 @@
-
-
 ;;; Package Management
 ;; Load Cask
 
@@ -7,7 +5,9 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
+
+;; (setq package-enable-at-startup nil)
+;; (package-initialize)
 
 ;; (setq byte-compile-warnings '(cl-functions))
 
@@ -44,7 +44,7 @@
   ;;(setq default-frame-alist '((font . "DejaVu Sans Mono-50"))`
 
 
-(use-package haskell-mode)
+;; (use-package haskell-mode)
 ;; (treemacs-load-theme "Default")
 
 ;; set transparency
