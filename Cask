@@ -49,6 +49,7 @@
 (depends-on "dumb-jump")
 (depends-on "drag-stuff")
 (depends-on "ecukes")
+(depends-on "edwina")
 (depends-on "eglot")
 (depends-on "egg-timer")
 (depends-on "ein")
