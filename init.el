@@ -11,12 +11,15 @@
 
 ;; (setq byte-compile-warnings '(cl-functions))
 
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
+(defun load-cask-and-pallet()
+  (require 'cask "~/.cask/cask.el")
+  (cask-initialize)
+  (require 'pallet)
+  (pallet-mode t))
+  
+(setq warning-minimum-level :error)
+(load-cask-and-pallet)
 
-;; Load Pallet
-(require 'pallet)
-(pallet-mode t)
 
 (defvar treemacs-no-load-time-warnings t)
 ;; (set-face-attribute 'hl-line nil :background "#2d2d31")
@@ -55,10 +58,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/current_todo.org")))
+ '(helm-ag-base-command "rg --no-heading")
+ '(helm-ag-success-exit-status '(0 2))
+ '(org-agenda-files '("~/current_todo.org"))
  '(package-selected-packages
-   (quote
-    (yasnippet-snippets which-key web-mode undercover treemacs-projectile treemacs-magit treemacs-icons-dired treemacs-evil smex smartparens rg prodigy powerline popwin poly-R pallet ox-reveal org-ref org-projectile org-pomodoro org-bullets nyan-mode multiple-cursors misenplace lorem-ipsum ivy-prescient ivy-posframe idle-highlight-mode flycheck-cask eyebrowse exwm-x expand-region exec-path-from-shell evil-nerd-commenter ess ert-runner ert-async elscreen dumb-jump drag-stuff doom-modeline dashboard counsel-projectile counsel-org-clock auto-complete ace-jump-mode))))
+   '(yasnippet-snippets which-key web-mode undercover treemacs-projectile treemacs-magit treemacs-icons-dired treemacs-evil smex smartparens rg prodigy powerline popwin poly-R pallet ox-reveal org-ref org-projectile org-pomodoro org-bullets nyan-mode multiple-cursors misenplace lorem-ipsum ivy-prescient ivy-posframe idle-highlight-mode flycheck-cask eyebrowse exwm-x expand-region exec-path-from-shell evil-nerd-commenter ess ert-runner ert-async elscreen dumb-jump drag-stuff doom-modeline dashboard counsel-projectile counsel-org-clock auto-complete ace-jump-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
