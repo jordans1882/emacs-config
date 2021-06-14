@@ -27,6 +27,11 @@
 ;; use-package to load and configure packages
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
+;; Load Pallet
+;; (require 'pallet)
+;; ;; (pallet-mode t)
+
+
 ;; (require 'use-package)
 ;; (use-package misenplace
 ;;   :init
@@ -37,11 +42,6 @@
 ;;   ;;(setup-misenplacewm)
 ;;   ;;(setup-misenplaceterm)
 ;;   )
-
-
-;; Load Pallet
-;; (require 'pallet)
-;; (pallet-mode t)
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 
@@ -73,6 +73,7 @@
 (use-package ace-jump-mode)
 (use-package cask-mode)
 (use-package cask-mode)
+(use-package cider)
 (use-package cheatsheet
   :config
   (cheatsheet-add-group 'Common
@@ -160,12 +161,35 @@
   ;;(add-to-list 'auto-mode-alist '("\\.cpp\\'" . company-mode))
   )
 (use-package company-irony)
+(use-package clojure-mode)
+(use-package corfu
+  ;; Optionally use TAB for cycling, default is `corfu-complete'.
+  ;; :bind (:map corfu-map
+  ;;        ("TAB" . corfu-next)
+  ;;        ("S-TAB" . corfu-previous))
+
+  ;; You may want to enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  :config
+
+  ;; Alternatively enable Corfu globally.
+  ;; This is recommended if Corfu is used with dabbrev.
+  (corfu-global-mode)
+
+  ;; Optionally enable cycling for `corfu-next' and `corfu-previous'.
+  ;; (setq corfu-cycle t)
+)
+
 (use-package cmake-ide
   :config
   (cmake-ide-setup))
 (use-package counsel-projectile
   :config
-  (counsel-projectile-mode))
+  (counsel-projectile-mode)
+  (setq projectile-indexing-method 'native))
 (use-package counsel-org-clock
   :config
   (counsel-projectile-mode))
@@ -271,6 +295,11 @@
    ;; Manually add in my-leader-map bindings to states
    (define-key compilation-mode-map "," my-leader-map)
    (define-key compilation-mode-map " " my-second-leader-map)
+   ;; (define-key org-mode-map "," my-leader-map)
+   ;; (define-key org-mode-map " " my-second-leader-map)
+   ;; (define-key doc-view-mode-map "," my-leader-map)
+   ;; (define-key doc-view-mode-map " " my-second-leader-map)
+
 
    ;; (define-key inferior-ess-mode-map "," my-leader-map)
    ;; (evil-define-key 'normal evil-normal-state-map "," 'my-leader-map)
@@ -338,7 +367,9 @@
   (add-hook 'web-mode-hook 'flycheck-mode)
   (add-hook 'json-mode-hook 'flycheck-mode)
 )
+(use-package flycheck-clojure)
 (use-package fill-column-indicator)
+(use-package git-messenger)
 (use-package git-gutter
   :config
   ;; If you enable global minor mode
@@ -351,6 +382,7 @@
   :config
   (setq gac-automatically-push-p "t")
   )
+(use-package go-mode)
 (use-package ivy
   :config
   (ivy-mode 1)
@@ -362,7 +394,34 @@
     (add-hook 'c-mode-hook 'irony-mode)
     (add-hook 'objc-mode-hook 'irony-mode)
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+(use-package lispy
+  :hook ((emacs-lisp-mode . lispy-mode)
+         (scheme-mode . lispy-mode)))
+(use-package lispyville
+  :hook ((lispy-mode . lispyville-mode))
+  :config
+  (lispyville-set-key-theme '(operators c-w additional
+                              additional-movement slurp/barf-cp
+                              prettify)))
+
 (use-package lorem-ipsum)
+(use-package keycast
+  :config
+  ;; This works with doom-modeline, inspired by this comment:
+  ;; https://github.com/tarsius/keycast/issues/7#issuecomment-627604064
+  (define-minor-mode keycast-mode
+    "Show current command and its key binding in the mode line."
+    :global t
+    (if keycast-mode
+        (add-hook 'pre-command-hook 'keycast-mode-line-update t)
+        (remove-hook 'pre-command-hook 'keycast-mode-line-update)))
+
+  (add-to-list 'global-mode-string '("" mode-line-keycast " ")))
+
+;;   (dw/leader-key-def
+;;    "tc" 'dw/toggle-command-window)
+
 ;; (use-package lsp-mode
 ;;   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 ;;   :init (setq lsp-keymap-prefix "H-l")
@@ -395,6 +454,7 @@
  '(helm-ag-base-command "rg --no-heading")
  `(helm-ag-success-exit-status '(0 2))))
 (use-package helm-swoop)
+(use-package lua-mode)
 (use-package company-lsp :commands company-lsp)
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 ;; (use-package lsp-latex
@@ -413,6 +473,8 @@
 ;;     (add-hook 'bibtex-mode-hook 'lsp)))
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 (use-package dap-mode)
+(use-package magit)
+(use-package magit-todos)
 (use-package mpc)
 (use-package mu4e
   :ensure nil
@@ -583,6 +645,7 @@
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   )
 (use-package org-pomodoro)
+(use-package org-preview-html)
 (use-package org-projectile
   :bind (("C-c n p" . org-projectile-project-todo-completing-read)
          ("C-c c" . org-capture))
@@ -593,6 +656,7 @@
     ;; (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
     (global-set-key (kbd "C-c c") 'org-capture)
     (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)))
+(use-package paredit)
 (use-package polymode
   :ensure t)
 (use-package poly-markdown
@@ -602,6 +666,7 @@
 (use-package poly-org
   :ensure t)
 (use-package pyvenv)
+(use-package python-pytest) ;; TODO: add default bindings
 (use-package prescient
   :config
   (prescient-persist-mode)
@@ -659,11 +724,24 @@
   (define-key doc-view-mode-map (kbd "C-w C-w") 'evil-window-next)
   (define-key doc-view-mode-map (kbd "-") 'doc-view-shrink)
   (define-key doc-view-mode-map (kbd "+") 'doc-view-enlarge)
-  (define-key doc-view-mode-map "," my-leader-map)
+  ;; (define-key doc-view-mode-map "," my-leader-map)
+  (define-key doc-view-mode-map "M-h" 'evil-window-left)
+  (define-key doc-view-mode-map "M-l" 'evil-window-right)
+  (define-key doc-view-mode-map "M-j" 'evil-window-down)
+  (define-key doc-view-mode-map "M-k" 'evil-window-up)
+
   )
 (use-package rainbow-delimiters)
 ;; (use-package vterm)
 (use-package rtags)
+(use-package sidebar
+  :config
+  (add-to-list 'load-path "~/.local/share/icons-in-terminal/")
+  ;; (add-to-list 'load-path "PATH-TO-SIDEBAR-DIRECTORY") ;; If it's not already done
+  (require 'sidebar)
+  (global-set-key (kbd "C-x C-f") 'sidebar-open)  ;; TODO set different binding
+  (global-set-key (kbd "C-x C-a") 'sidebar-buffers-open) ;; TODO set different binding
+  )
 (use-package treemacs
   :ensure t
   :defer t
@@ -743,6 +821,10 @@
 (use-package treemacs-magit
   :after treemacs magit
   :ensure t)
+
+(use-package tree-sitter)
+(use-package tree-sitter-langs)
+
 (use-package which-key
   :config
   (which-key-mode)
@@ -917,6 +999,39 @@
   (define-key my-leader-map "tr" 'tab-bar-rename-tab)
   (define-key my-leader-map "tL" 'tab-bar-move-tab)
 
+;;   (which-key-add-keymap-based-replacements some-map
+;;     "f" '("foo" . long-command-name-foo)
+;;     ;; or
+;;     ;; "f" "foo" (see the docstring)
+;;     "b" '("bar-prefix")
+;;     ;; or
+;;     ;; "b" "bar-prefix" (see the docstring)
+;;   )
+
+  (which-key-add-key-based-replacements ",a" "agenda")
+  (which-key-add-key-based-replacements ",b" "buffers")
+  (which-key-add-key-based-replacements ",d" "dumb")
+  (which-key-add-key-based-replacements ",e" "errors")
+  (which-key-add-key-based-replacements ",f" "files")
+  (which-key-add-key-based-replacements ",g" "git")
+  (which-key-add-key-based-replacements ",h" "help")
+  (which-key-add-key-based-replacements ",j" "jump")
+  (which-key-add-key-based-replacements ",p" "projects")
+  (which-key-add-key-based-replacements ",o" "org")
+  (which-key-add-key-based-replacements ",r" "R")
+  (which-key-add-key-based-replacements ",t" "tabs")
+  (which-key-add-key-based-replacements ",x" "edit")
+  (which-key-add-key-based-replacements ",w" "windows")
+  (which-key-add-key-based-replacements ",y" "yas")
+
+;;   (which-key-add-key-based-replacements my-leader-map
+;;     "t" '("tab"))
+    ;; "tt" "search tabs"
+    ;; "tl" "tab right"
+    ;; "th" "tab left"
+    ;; "tc" "create tab"
+    ;; "td"  "close tab")
+
   ;; binding ",w" for windows
   (define-key my-leader-map "wd" 'evil-window-delete)
   (define-key my-leader-map "wh" 'evil-window-left)
@@ -995,7 +1110,9 @@
     ",3" 'slack-message-embed-channel))
 (use-package skeletor)
 
+
 (use-package sublimity)
+
 
 ;; User-defined functions
 
@@ -1305,8 +1422,17 @@ The return value is the new value of LIST-VAR."
 (define-key lisp-interaction-mode-map (kbd "<C-return>") 'eval-defun)
 (define-key lisp-interaction-mode-map (kbd "M-<RET>") 'eval-defun)
 
+
+(define-key clojure-mode-map (kbd "<C-return>") 'cider-eval-defun-at-point)
+(define-key clojurescript-mode-map (kbd "<C-return>") 'cider-eval-defun-at-point)
+;; (define-key clojure-mode-map (kbd "M-<RET>") 'eval-defun)
+
 ;; Global bindings
 
+;; (define-key global-map (kbd "M-x") 'evil-force-normal-state)
+(define-key global-map (kbd "<ESC> <ESC>") 'evil-force-normal-state)
+(define-key global-map (kbd "ESC <escape>") 'evil-force-normal-state)
+(define-key global-map (kbd "<escape>") 'evil-force-normal-state)
 (define-key global-map (kbd "M-C-j") 'evil-window-decrease-height)
 (define-key global-map (kbd "M-C-k") 'evil-window-increase-height)
 (define-key global-map (kbd "M-C-h") 'evil-window-decrease-width)
@@ -1347,9 +1473,18 @@ The return value is the new value of LIST-VAR."
 (define-key org-mode-map (kbd "M-<tab>") 'tab-bar-switch-to-next-tab)
 (define-key org-mode-map (kbd "M-S-<tab>") 'tab-bar-switch-to-prev-tab)
 
+;; Are thise working?
+;; (define-key org-mode-map "M-h" 'evil-window-left)
+;; (define-key org-mode-map "M-l" 'evil-window-right)
+;; (define-key org-mode-map "M-j" 'evil-window-down)
+;; (define-key org-mode-map "M-k" 'evil-window-up)
+
 ;; LaTeX mode bindings
 (define-key LaTeX-mode-map (kbd "C-j") 'evil-window-down)
 (define-key python-mode-map (kbd "M-<RET>") 'elpy-shell-send-statement-and-step)
+(define-key python-mode-map (kbd "M-RET") 'elpy-shell-send-statement-and-step)
+(define-key python-mode-map (kbd "<s-return>") 'elpy-shell-send-statement-and-step)
+(define-key python-mode-map (kbd ", ,") 'elpy-shell-send-statement-and-step)
 
 ;; (define-key ess-mode-map (kbd "K") 'elpy-shell-send-statement-and-step)
 
@@ -1443,15 +1578,19 @@ R-FUNC: An R function to use on object"
 (defun dawn ()
   "Set theme to day"
   (interactive)
-  (counsel-load-theme-action "doom-nova"))
+  (counsel-load-theme-action "doom-gruvbox-light"))
 (defun day ()
+  "Set theme to day"
+  (interactive)
+  (counsel-load-theme-action "doom-solarized-light"))
+(defun sunny ()
   "Set theme to day"
   (interactive)
   (counsel-load-theme-action "doom-nord-light"))
 (defun dusk ()
   "Set theme to dusk"
   (interactive)
-  (counsel-load-theme-action "doom-gruvbox-light"))
+  (counsel-load-theme-action "doom-nova"))
 (defun evening ()
   "Set theme to evening"
   (interactive)
@@ -1512,35 +1651,15 @@ R-FUNC: An R function to use on object"
 (setq vc-follow-symlinks "t")
 (setq-default show-trailing-whitespace t)
 
+(setq default-frame-alist '((font ."DejaVu Sans Mono-16")))
 
+;; TODO: seems like I would want this to be mode specific....
+(setq global-display-fill-column-indicator-mode 1)
 
+(global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
+(tool-bar-mode -1)
 
-
-
-
-
-
-
-
-
-
-  (setq default-frame-alist '((font ."DejaVu Sans Mono-16")))
-
-  (global-set-key [f9] 'toggle-menu-bar-mode-from-frame)
-  (tool-bar-mode -1)
-
-  (setq backup-directory-alist `(("." . "~/.saves")))
-  ;; (set-default-font "DejaVu Sans Mono-50")
-  ;; (set-face-attribute 'default nil :font "DejaVu Sans Mono-50" )
-  ;; (set-frame-font "DejaVu Sans Mono-50" nil t)
-  ;;(setq default-frame-alist '((font . "DejaVu Sans Mono-50"))`
-
-
-
-;; (use-package haskell-mode)
-;; (treemacs-load-theme "Default")
-
-;; set transparency
+(setq backup-directory-alist `(("." . "~/.saves")))
 (set-frame-parameter (selected-frame) 'alpha '(95 50))
 (add-to-list 'default-frame-alist '(alpha 95 50))
 (custom-set-variables
@@ -1554,7 +1673,7 @@ R-FUNC: An R function to use on object"
  '(org-agenda-files
    '("~/work/prostate-topology/code/cnn-ensemble/notes.org" "~/current_todo.org"))
  '(package-selected-packages
-   '(skeletor slime yasnippet-snippets which-key web-mode undercover treemacs-projectile treemacs-magit treemacs-icons-dired treemacs-evil smex smartparens rg prodigy powerline popwin poly-R pallet ox-reveal org-ref org-projectile org-pomodoro org-bullets nyan-mode multiple-cursors misenplace lorem-ipsum ivy-prescient ivy-posframe idle-highlight-mode flycheck-cask eyebrowse exwm-x expand-region exec-path-from-shell evil-nerd-commenter ess ert-runner ert-async elscreen dumb-jump drag-stuff doom-modeline dashboard counsel-projectile counsel-org-clock auto-complete ace-jump-mode))
+   '(lispyville lispy skeletor slime yasnippet-snippets which-key web-mode undercover treemacs-projectile treemacs-magit treemacs-icons-dired treemacs-evil smex smartparens rg prodigy powerline popwin poly-R pallet ox-reveal org-ref org-projectile org-pomodoro org-bullets nyan-mode multiple-cursors misenplace lorem-ipsum ivy-prescient ivy-posframe idle-highlight-mode flycheck-cask eyebrowse exwm-x expand-region exec-path-from-shell evil-nerd-commenter ess ert-runner ert-async elscreen dumb-jump drag-stuff doom-modeline dashboard counsel-projectile counsel-org-clock auto-complete ace-jump-mode))
  '(safe-local-variable-values '((eval hs-minor-mode t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
